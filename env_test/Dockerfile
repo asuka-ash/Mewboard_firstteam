@@ -2,7 +2,7 @@
 FROM ubuntu:20.04
 
 ENV USER developer
-ENV APP_HOME /home/${USER}/app
+ENV APP_HOME /home/${USER}/tool
 ENV EXECUTABLE env_test
 
 # Set a password for the root user
@@ -28,4 +28,5 @@ RUN chown -R ${USER}:${USER} ${APP_HOME}
 # Use the new user for subsequent commands
 USER ${USER}
 
-CMD /bin/sh -c 'make'
+# The ENTRYPOINT runs make and then provides a shell
+ENTRYPOINT make && exec /bin/bash
