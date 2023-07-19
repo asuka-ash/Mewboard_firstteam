@@ -1,13 +1,31 @@
-FROM ubuntu:20
+# Use the official Ubuntu base image
+FROM ubuntu:20.04
 
-RUN apt-get -y update && apt-get install -y
+ENV USER developer
+ENV APP_HOME /home/${USER}/app
+ENV EXECUTABLE env_test
 
-RUN apt-get -y install clang
+# Set a password for the root user
+RUN echo 'root:root' | chpasswd
 
-COPY . /usr/src/dockertest1
+# Create a new user
+RUN useradd -m -s /bin/bash ${USER}
 
-WORKDIR /usr/src/dockertest1
+# Add your desired commands or configurations here
+RUN apt-get -y update && \
+    apt-get -y install build-essential && \
+    apt install -y make && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN clang++ -o env_test env_test.cpp
+# Set the working directory to the new user's home directory
+WORKDIR ${APP_HOME}
 
-CMD [ "./env_test" ]
+COPY . ${APP_HOME}
+
+# Change ownership of APP_HOME to the developer user
+RUN chown -R ${USER}:${USER} ${APP_HOME}
+
+# Use the new user for subsequent commands
+USER ${USER}
+
+CMD /bin/sh -c 'make'
