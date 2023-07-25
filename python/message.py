@@ -19,8 +19,14 @@ def receive(conn):
 def add_listener(conn, addr):
     connected = True
     while connected:
-        msg = receive(conn)
-        if msg == env.DISCONNECT_MSG:
+        try:
+            msg = receive(conn)
+            if msg is None or msg == env.DISCONNECT_MSG:
+                connected = False
+                print(f"[{addr}] Connection closed")
+            else:
+                print(f"[{addr}] {msg}")
+        except Exception as e:
+            print(f"[{addr}] Error while receiving message: {str(e)}")
             connected = False
-        print(f"[{addr}] {msg}")
     conn.close()

@@ -1,6 +1,6 @@
 import socket
 
-PORT = 3000
+PORT = 5009
 HOST = socket.gethostbyname(socket.gethostname())
 HEADER = 64
 FORMAT = 'utf-8'
