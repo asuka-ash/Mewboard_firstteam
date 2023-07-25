@@ -1,5 +1,5 @@
 # Use the official Ubuntu base image
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ENV USER developer
 ENV APP_HOME /home/${USER}/tool
@@ -22,7 +22,7 @@ WORKDIR ${APP_HOME}
 
 COPY . ${APP_HOME}
 
-# Change ownership of APP_HOME to the developer user
+# Change ownership of APP_HOME to the developer user. No need . will install with root privelege
 RUN chown -R ${USER}:${USER} ${APP_HOME}
 
 # Use the new user for subsequent commands
